@@ -1,0 +1,45 @@
+# namespace-editor для finance
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-editors
+  namespace: finance
+  labels:
+    rbac.propdevelopment.com/binding: namespace-editor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-editor
+subjects:
+- kind: User
+  name: owner-finance
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: dev-finance
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:finance:editors
+  apiGroup: rbac.authorization.k8s.io
+---
+# namespace-viewer для finance
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-viewers
+  namespace: finance
+  labels:
+    rbac.propdevelopment.com/binding: namespace-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-viewer
+subjects:
+- kind: User
+  name: ops-finance
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: accountant
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:finance:viewers
+  apiGroup: rbac.authorization.k8s.io

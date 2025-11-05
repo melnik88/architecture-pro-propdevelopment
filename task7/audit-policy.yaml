@@ -1,0 +1,94 @@
+apiVersion: audit.k8s.io/v1
+kind: Policy
+metadata:
+  name: pod-security-audit-policy
+rules:
+  # Логирование всех запросов на создание/изменение подов в audit-zone
+  - level: RequestResponse
+    namespaces: ["audit-zone"]
+    verbs: ["create", "update", "patch"]
+    resources:
+      - group: ""
+        resources: ["pods"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование всех отклоненных запросов (admission denied)
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: ""
+        resources: ["pods"]
+      - group: "apps"
+        resources: ["deployments", "replicasets", "daemonsets", "statefulsets"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование изменений в политиках безопасности
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: "templates.gatekeeper.sh"
+        resources: ["constrainttemplates"]
+      - group: "constraints.gatekeeper.sh"
+        resources: ["*"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование изменений в namespace с метками pod-security
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: ""
+        resources: ["namespaces"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование изменений в RBAC
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: "rbac.authorization.k8s.io"
+        resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование изменений в ServiceAccounts
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: ""
+        resources: ["serviceaccounts"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование изменений в Secrets
+  - level: Metadata
+    verbs: ["get", "list", "watch"]
+    resources:
+      - group: ""
+        resources: ["secrets"]
+    omitStages:
+      - RequestReceived
+
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: ""
+        resources: ["secrets"]
+    omitStages:
+      - RequestReceived
+
+  # Логирование exec/attach/portforward (потенциально опасные операции)
+  - level: Request
+    verbs: ["create"]
+    resources:
+      - group: ""
+        resources: ["pods/exec", "pods/attach", "pods/portforward"]
+    omitStages:
+      - RequestReceived
+
+  # Минимальное логирование для остальных запросов
+  - level: Metadata
+    omitStages:
+      - RequestReceived

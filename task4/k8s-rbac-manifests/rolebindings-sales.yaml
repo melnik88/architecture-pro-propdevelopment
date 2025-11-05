@@ -1,0 +1,51 @@
+# namespace-editor для sales
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-editors
+  namespace: sales
+  labels:
+    rbac.propdevelopment.com/binding: namespace-editor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-editor
+subjects:
+- kind: User
+  name: owner-sales
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: devops-sales
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: dev-backend-sales
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: dev-frontend-sales
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:sales:editors
+  apiGroup: rbac.authorization.k8s.io
+---
+# namespace-viewer для sales
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-viewers
+  namespace: sales
+  labels:
+    rbac.propdevelopment.com/binding: namespace-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-viewer
+subjects:
+- kind: User
+  name: ops-sales
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: analyst-clients
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:sales:viewers
+  apiGroup: rbac.authorization.k8s.io

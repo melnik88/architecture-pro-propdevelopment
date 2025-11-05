@@ -1,0 +1,51 @@
+# namespace-editor для tenant-services
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-editors
+  namespace: tenant-services
+  labels:
+    rbac.propdevelopment.com/binding: namespace-editor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-editor
+subjects:
+- kind: User
+  name: owner-tenant
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: devops-tenant
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: dev-backend-tenant
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: dev-smarthome
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:tenant-services:editors
+  apiGroup: rbac.authorization.k8s.io
+---
+# namespace-viewer для tenant-services
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-viewers
+  namespace: tenant-services
+  labels:
+    rbac.propdevelopment.com/binding: namespace-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-viewer
+subjects:
+- kind: User
+  name: ops-tenant
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: analyst-zku
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:tenant-services:viewers
+  apiGroup: rbac.authorization.k8s.io

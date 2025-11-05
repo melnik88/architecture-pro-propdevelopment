@@ -1,0 +1,115 @@
+---
+# Pod для front-end приложения
+apiVersion: v1
+kind: Pod
+metadata:
+  name: front-end-app
+  labels:
+    role: front-end
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+
+---
+# Service для front-end
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end-app
+spec:
+  selector:
+    role: front-end
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+# Pod для back-end-api
+apiVersion: v1
+kind: Pod
+metadata:
+  name: back-end-api
+  labels:
+    role: back-end-api
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+
+---
+# Service для back-end-api
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-end-api
+spec:
+  selector:
+    role: back-end-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+# Pod для admin-front-end
+apiVersion: v1
+kind: Pod
+metadata:
+  name: admin-front-end-app
+  labels:
+    role: admin-front-end
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+
+---
+# Service для admin-front-end
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-front-end-app
+spec:
+  selector:
+    role: admin-front-end
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+# Pod для admin-back-end-api
+apiVersion: v1
+kind: Pod
+metadata:
+  name: admin-back-end-api
+  labels:
+    role: admin-back-end-api
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+
+---
+# Service для admin-back-end-api
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-back-end-api
+spec:
+  selector:
+    role: admin-back-end-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

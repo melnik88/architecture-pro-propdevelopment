@@ -1,0 +1,66 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8spsphostfilesystem
+  annotations:
+    description: >-
+      Запрещает использование hostPath volumes.
+      HostPath volumes предоставляют доступ к файловой системе хоста,
+      что может привести к утечке данных или компрометации хоста.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPSPHostFilesystem
+      validation:
+        openAPIV3Schema:
+          type: object
+          description: Запрещает использование hostPath volumes
+          properties:
+            allowedHostPaths:
+              type: array
+              description: "Список разрешенных hostPath (если пустой - все запрещены)"
+              items:
+                type: object
+                properties:
+                  pathPrefix:
+                    type: string
+                  readOnly:
+                    type: boolean
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spsphostfilesystem
+
+        violation[{"msg": msg, "details": {}}] {
+          volume := input_hostpath_volumes[_]
+          not input_hostpath_allowed(volume)
+          msg := sprintf("HostPath volume запрещен: %v", [volume.name])
+        }
+
+        input_hostpath_volumes[v] {
+          v := input.review.object.spec.volumes[_]
+          has_field(v, "hostPath")
+        }
+
+        input_hostpath_allowed(volume) {
+          # Если allowedHostPaths не указан или пустой, все hostPath запрещены
+          allowedPaths := object.get(input.parameters, "allowedHostPaths", [])
+          count(allowedPaths) == 0
+          false
+        }
+
+        input_hostpath_allowed(volume) {
+          allowedPaths := object.get(input.parameters, "allowedHostPaths", [])
+          count(allowedPaths) > 0
+          allowedPath := allowedPaths[_]
+          path_matches(volume.hostPath.path, allowedPath.pathPrefix)
+        }
+
+        path_matches(path, prefix) {
+          startswith(path, prefix)
+        }
+
+        has_field(obj, field) {
+          obj[field]
+        }

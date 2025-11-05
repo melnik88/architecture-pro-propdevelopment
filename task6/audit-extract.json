@@ -1,0 +1,91 @@
+{
+  "secretAccess": [
+    {
+      "timestamp": "2024-01-15T10:23:45.123456Z",
+      "user": "system:serviceaccount:secure-ops:monitoring",
+      "namespace": "kube-system",
+      "secretName": "default-token-abc123",
+      "verb": "get",
+      "responseStatus": 200,
+      "userAgent": "kubectl/v1.28.0"
+    },
+    {
+      "timestamp": "2024-01-15T10:24:12.789012Z",
+      "user": "system:serviceaccount:secure-ops:monitoring",
+      "namespace": "kube-system",
+      "secretName": "etcd-certs",
+      "verb": "list",
+      "responseStatus": 403,
+      "userAgent": "kubectl/v1.28.0"
+    }
+  ],
+  "privilegedPods": [
+    {
+      "timestamp": "2024-01-15T10:25:30.456789Z",
+      "user": "kubernetes-admin",
+      "namespace": "secure-ops",
+      "podName": "privileged-pod",
+      "responseStatus": 201,
+      "userAgent": "kubectl/v1.28.0"
+    }
+  ],
+  "execInPods": [
+    {
+      "timestamp": "2024-01-15T10:26:45.234567Z",
+      "user": "kubernetes-admin",
+      "namespace": "kube-system",
+      "podName": "coredns-5d78c9869d-abc12",
+      "responseStatus": 101,
+      "userAgent": "kubectl/v1.28.0"
+    }
+  ],
+  "roleBindingCreation": [
+    {
+      "timestamp": "2024-01-15T10:28:15.678901Z",
+      "user": "kubernetes-admin",
+      "namespace": "secure-ops",
+      "bindingName": "escalate-binding",
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "monitoring",
+          "namespace": "secure-ops"
+        }
+      ],
+      "responseStatus": 201,
+      "userAgent": "kubectl/v1.28.0"
+    }
+  ],
+  "auditPolicyChanges": [
+    {
+      "timestamp": "2024-01-15T10:27:30.345678Z",
+      "user": "admin",
+      "verb": "delete",
+      "requestURI": "/api/v1/namespaces/kube-system/configmaps/audit-policy",
+      "responseStatus": 403,
+      "userAgent": "kubectl/v1.28.0"
+    }
+  ],
+  "unauthorizedAccess": [
+    {
+      "timestamp": "2024-01-15T10:23:50.567890Z",
+      "user": "system:serviceaccount:secure-ops:monitoring",
+      "verb": "get",
+      "resource": "secrets",
+      "namespace": "kube-system",
+      "name": "default-token-abc123",
+      "reason": "Forbidden",
+      "userAgent": "kubectl/v1.28.0"
+    },
+    {
+      "timestamp": "2024-01-15T10:27:35.890123Z",
+      "user": "admin",
+      "verb": "delete",
+      "resource": "configmaps",
+      "namespace": "kube-system",
+      "name": "audit-policy",
+      "reason": "Forbidden",
+      "userAgent": "kubectl/v1.28.0"
+    }
+  ]
+}

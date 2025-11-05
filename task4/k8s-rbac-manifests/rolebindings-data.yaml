@@ -1,0 +1,45 @@
+# namespace-editor для data
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-editors
+  namespace: data
+  labels:
+    rbac.propdevelopment.com/binding: namespace-editor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-editor
+subjects:
+- kind: User
+  name: owner-data
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: dev-data
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:data:editors
+  apiGroup: rbac.authorization.k8s.io
+---
+# namespace-viewer для data
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: namespace-viewers
+  namespace: data
+  labels:
+    rbac.propdevelopment.com/binding: namespace-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-viewer
+subjects:
+- kind: User
+  name: ops-monitoring
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: analyst-bi
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: namespace:data:viewers
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,51 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: namespace-editor
+  namespace: tenant-services
+  labels:
+    rbac.propdevelopment.com/role: namespace-editor
+rules:
+# Полный доступ к основным ресурсам
+- apiGroups: ["", "apps", "batch", "extensions"]
+  resources:
+    - pods
+    - pods/log
+    - pods/exec
+    - pods/portforward
+    - services
+    - endpoints
+    - persistentvolumeclaims
+    - configmaps
+    - secrets
+    - deployments
+    - replicasets
+    - statefulsets
+    - daemonsets
+    - jobs
+    - cronjobs
+  verbs: ["*"]
+# Управление RBAC внутри namespace
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources:
+    - roles
+    - rolebindings
+  verbs: ["*"]
+# Управление ServiceAccounts
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["*"]
+# Управление ResourceQuotas и LimitRanges
+- apiGroups: [""]
+  resources:
+    - resourcequotas
+    - limitranges
+  verbs: ["*"]
+# Управление Ingress
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["*"]
+# Просмотр событий
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "watch"]

@@ -1,0 +1,36 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: namespace-viewer
+  namespace: data
+  labels:
+    rbac.propdevelopment.com/role: namespace-viewer
+rules:
+# Только чтение всех ресурсов
+- apiGroups: ["", "apps", "batch", "extensions"]
+  resources:
+    - pods
+    - pods/log
+    - services
+    - endpoints
+    - persistentvolumeclaims
+    - configmaps
+    - deployments
+    - replicasets
+    - statefulsets
+    - daemonsets
+    - jobs
+    - cronjobs
+  verbs: ["get", "list", "watch"]
+# Просмотр событий
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "watch"]
+# Просмотр Ingress
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch"]
+# Просмотр метрик
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["pods", "nodes"]
+  verbs: ["get", "list"]
